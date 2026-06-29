@@ -1,4 +1,4 @@
-package com.doante.dao;
+package com.donate.dao;
 
 import java.sql.*;
 import java.util.ArrayList;

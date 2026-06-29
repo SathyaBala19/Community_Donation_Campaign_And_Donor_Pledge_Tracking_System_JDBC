@@ -62,6 +62,9 @@ public class DonateService {
 		return donorDAO.deleteDonor(donorID);
 	}
 	
+	public List<Campaign> viewAllCampaigns() {
+	    return campaignDAO.viewAllCampaigns();
+	}
 	
 	public Campaign viewCampaignDetails(String campaignID) {
 		return campaignDAO.findCampaign(campaignID);

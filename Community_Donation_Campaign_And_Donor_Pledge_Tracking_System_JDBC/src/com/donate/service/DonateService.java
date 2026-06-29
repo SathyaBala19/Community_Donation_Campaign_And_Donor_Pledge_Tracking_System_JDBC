@@ -9,105 +9,103 @@ import com.donate.dao.*;
 import com.donate.util.*;
 
 public class DonateService {
-	private DonorDAO donorDAO = new DonorDAO();
-	private CampaignDAO campaignDAO = new CampaignDAO();
-	private PledgeDAO pledgeDAO = new PledgeDAO();
-	
-	public Donor viewDonorDetails(String donorID) {
-		if (donorID == null || donorID.trim().isEmpty()) {
-			return null;
-		}
-		return donorDAO.findDonor(donorID);
-	}
-	
-	public List<Donor> viewAllDonor() {
-		return  donorDAO.viewAllDonors();
-	}
-	
-	public boolean registerNewDonor(Donor donor) throws ValidationException {
-		if (donor.getDonorId() == null || donor.getDonorId().trim().isEmpty()) {
-			throw new ValidationException("Donor ID cannot be empty.");
-		}
-		
-		if (donor.getFullName() == null || donor.getFullName().trim().isEmpty()) {
-			throw new ValidationException("Full Name cannot be empty");
-		}
-		
-		if (donor.getMobile() == null || donor.getMobile().trim().isEmpty()) {
-			throw new ValidationException("Mobile cannot be empty");
-		}
-		
-		if (donor.getEmail() == null || donor.getEmail().isEmpty()) {
-			if (!donor.getEmail().contains("@")) {
-				throw new ValidationException("Email format is invalid!");
-			}
-		}
-		
-		Donor existing = donorDAO.findDonor(donor.getDonorId());
-		if (existing != null) {
-			throw new ValidationException("Donor ID already exists!");
-		}
-		donor.setStatus("ACTIVE");
-		return donorDAO.insertDonor(donor);
-	}
-	
-	public boolean removeDonor(String donorID) throws ValidationException, ActivePledgeExistException {
-		if (donorID == null || donorID.trim().isEmpty()) {
-			throw new ValidationException("Donor ID cannot be empty");
-		}
-		List<Pledge> activePledges = pledgeDAO.findActivePledgesForDonor(donorID);
-		if (activePledges != null && !activePledges.isEmpty()) {
-			throw new ActivePledgeExistException("Cannot remove donor! Active pledges exist!");
-		}
-		return donorDAO.deleteDonor(donorID);
-	}
-	
-	public List<Campaign> viewAllCampaigns() {
-	    return campaignDAO.viewAllCampaigns();
-	}
-	
-	public Campaign viewCampaignDetails(String campaignID) {
-		return campaignDAO.findCampaign(campaignID);
-	}
-	
-	public boolean createCampaign(Campaign campaign) throws ValidationException {
-		if (campaign.getCampaignId() == null || campaign.getCampaignId().trim().isEmpty()) {
-		    throw new ValidationException("Campaign ID cannot be empty");
-		}
-		if (campaign.getCampaignName() == null || campaign.getCampaignName().trim().isEmpty()) {
-			throw new ValidationException("Campaign Name cannot be empty");
-		}
-		if (campaign.getStartDate() == null || campaign.getEndDate() == null) {
-			throw new ValidationException("Start and End Dates cannot be null");
-		}
-		if (campaign.getStartDate().after(campaign.getEndDate())) {
-			throw new ValidationException("Start date cannot be after End date!");
-		}
-		if (campaign.getTargetAmount() == null || campaign.getTargetAmount().compareTo(BigDecimal.ZERO)< 0 ) {
-			throw new ValidationException("Target amount cannot be negative");
-		}
-		Campaign existing = campaignDAO.findCampaign(campaign.getCampaignId());
-		if (existing != null) {
-			throw new ValidationException("Campaign ID already exists!");
-		}
-		return campaignDAO.insertCampaign(campaign);
-	}
-	
-	public boolean closeCampaign(String campaignID) throws ValidationException, ActivePledgeExistException {
-		if (campaignID == null || campaignID.trim().isEmpty()) {
-			throw new ValidationException("Campaign ID cannot be empty");
-		}
-		Campaign campaign = campaignDAO.findCampaign(campaignID);
-		if (campaign == null || campaign.getStatus().equals("CLOSED")) {
-			return false;
-		}
-		List<Pledge> activePledges = pledgeDAO.findActivePledgesForCampaign(campaignID);
-		if (activePledges != null && !activePledges.isEmpty()) {
-			throw new ActivePledgeExistException("Cannot close campaign! Active pledges exist");
-		}
-		return campaignDAO.updateCampaign(campaignID, "CLOSED");
-	}
-	
+    private DonorDAO donorDAO = new DonorDAO();
+    private CampaignDAO campaignDAO = new CampaignDAO();
+    private PledgeDAO pledgeDAO = new PledgeDAO();
+
+    public Donor viewDonorDetails(String donorID) {
+        if (donorID == null || donorID.trim().isEmpty()) {
+            return null;
+        }
+        return donorDAO.findDonor(donorID);
+    }
+
+    public List<Donor> viewAllDonors() {
+        return donorDAO.viewAllDonors();
+    }
+
+    public boolean registerNewDonor(Donor donor) throws ValidationException {
+        if (donor.getDonorId() == null || donor.getDonorId().trim().isEmpty()) {
+            throw new ValidationException("Donor ID cannot be empty.");
+        }
+        if (donor.getFullName() == null || donor.getFullName().trim().isEmpty()) {
+            throw new ValidationException("Full Name cannot be empty");
+        }
+        if (donor.getMobile() == null || donor.getMobile().trim().isEmpty()) {
+            throw new ValidationException("Mobile cannot be empty");
+        }
+        if (donor.getEmail() != null && !donor.getEmail().isEmpty()) {
+            if (!donor.getEmail().contains("@")) {
+                throw new ValidationException("Email format is invalid!");
+            }
+        }
+        Donor existing = donorDAO.findDonor(donor.getDonorId());
+        if (existing != null) {
+            throw new ValidationException("Donor ID already exists!");
+        }
+        donor.setStatus("ACTIVE");
+        return donorDAO.insertDonor(donor);
+    }
+
+    public boolean removeDonor(String donorID) 
+            throws ValidationException, ActivePledgeExistException {
+        if (donorID == null || donorID.trim().isEmpty()) {
+            throw new ValidationException("Donor ID cannot be empty");
+        }
+        List<Pledge> activePledges = pledgeDAO.findActivePledgesForDonor(donorID);
+        if (activePledges != null && !activePledges.isEmpty()) {
+            throw new ActivePledgeExistException("Cannot remove donor! Active pledges exist!");
+        }
+        return donorDAO.deleteDonor(donorID);
+    }
+
+    public List<Campaign> viewAllCampaigns() {
+        return campaignDAO.viewAllCampaigns();
+    }
+
+    public Campaign viewCampaignDetails(String campaignID) {
+        return campaignDAO.findCampaign(campaignID);
+    }
+
+    public boolean createCampaign(Campaign campaign) throws ValidationException {
+        if (campaign.getCampaignId() == null || campaign.getCampaignId().trim().isEmpty()) {
+            throw new ValidationException("Campaign ID cannot be empty");
+        }
+        if (campaign.getCampaignName() == null || campaign.getCampaignName().trim().isEmpty()) {
+            throw new ValidationException("Campaign Name cannot be empty");
+        }
+        if (campaign.getStartDate() == null || campaign.getEndDate() == null) {
+            throw new ValidationException("Start and End Dates cannot be null");
+        }
+        if (campaign.getStartDate().after(campaign.getEndDate())) {
+            throw new ValidationException("Start date cannot be after End date!");
+        }
+        if (campaign.getTargetAmount() == null || 
+            campaign.getTargetAmount().compareTo(BigDecimal.ZERO) < 0) {
+            throw new ValidationException("Target amount cannot be negative");
+        }
+        Campaign existing = campaignDAO.findCampaign(campaign.getCampaignId());
+        if (existing != null) {
+            throw new ValidationException("Campaign ID already exists!");
+        }
+        return campaignDAO.insertCampaign(campaign);
+    }
+
+    public boolean closeCampaign(String campaignID) 
+            throws ValidationException, ActivePledgeExistException {
+        if (campaignID == null || campaignID.trim().isEmpty()) {
+            throw new ValidationException("Campaign ID cannot be empty");
+        }
+        Campaign campaign = campaignDAO.findCampaign(campaignID);
+        if (campaign == null || campaign.getStatus().equals("CLOSED")) {
+            return false;
+        }
+        List<Pledge> activePledges = pledgeDAO.findActivePledgesForCampaign(campaignID);
+        if (activePledges != null && !activePledges.isEmpty()) {
+            throw new ActivePledgeExistException("Cannot close campaign! Active pledges exist");
+        }
+        return campaignDAO.updateCampaign(campaignID, "CLOSED");
+    }
 
     public List<Pledge> listPledgesByDonor(String donorID) {
         return pledgeDAO.findPledgesByDonor(donorID);
@@ -217,5 +215,4 @@ public class DonateService {
             try { if (con != null) con.setAutoCommit(true); } catch (Exception ex) {}
         }
     }
-
 }

@@ -77,7 +77,7 @@ public class DonateMain {
             System.out.print("Enter City: ");
             d.setCity(sc.nextLine());
             boolean ok = donateService.registerNewDonor(d);
-            System.out.println(ok ? "DONOR REGISTERED SUCCESSFULLY!" 
+            System.out.println(ok ? "DONOR REGISTERED SUCCESSFULLY!"
                                   : "DONOR REGISTRATION FAILED!");
         } catch (ValidationException e) {
             System.out.println("Validation Error: " + e.getMessage());
@@ -88,7 +88,7 @@ public class DonateMain {
 
     private static void viewAllDonors() {
         System.out.println("\nAll Donors");
-        List<Donor> list = donateService.viewAllDonor();
+        List<Donor> list = donateService.viewAllDonors();
         if (list.isEmpty()) {
             System.out.println("No donors found!");
         } else {
@@ -128,7 +128,7 @@ public class DonateMain {
             System.out.print("\nEnter Donor ID to remove: ");
             String id = sc.nextLine();
             boolean ok = donateService.removeDonor(id);
-            System.out.println(ok ? "DONOR REMOVED SUCCESSFULLY!" 
+            System.out.println(ok ? "DONOR REMOVED SUCCESSFULLY!"
                                   : "DONOR NOT FOUND!");
         } catch (ValidationException e) {
             System.out.println("Validation Error: " + e.getMessage());
@@ -156,7 +156,7 @@ public class DonateMain {
             System.out.print("Enter Status (PLANNED/ACTIVE): ");
             c.setStatus(sc.nextLine());
             boolean ok = donateService.createCampaign(c);
-            System.out.println(ok ? "CAMPAIGN CREATED SUCCESSFULLY!" 
+            System.out.println(ok ? "CAMPAIGN CREATED SUCCESSFULLY!"
                                   : "CAMPAIGN CREATION FAILED!");
         } catch (ValidationException e) {
             System.out.println("Validation Error: " + e.getMessage());
@@ -208,7 +208,7 @@ public class DonateMain {
             System.out.print("\nEnter Campaign ID to close: ");
             String id = sc.nextLine();
             boolean ok = donateService.closeCampaign(id);
-            System.out.println(ok ? "CAMPAIGN CLOSED SUCCESSFULLY!" 
+            System.out.println(ok ? "CAMPAIGN CLOSED SUCCESSFULLY!"
                                   : "CAMPAIGN NOT FOUND OR ALREADY CLOSED!");
         } catch (ValidationException e) {
             System.out.println("Validation Error: " + e.getMessage());
@@ -232,7 +232,7 @@ public class DonateMain {
             BigDecimal pledgeAmount = new BigDecimal(sc.nextLine());
             boolean ok = donateService.recordPledge(
                 donorID, campaignID, pledgeDate, pledgeAmount);
-            System.out.println(ok ? "PLEDGE RECORDED SUCCESSFULLY!" 
+            System.out.println(ok ? "PLEDGE RECORDED SUCCESSFULLY!"
                                   : "PLEDGE FAILED!");
         } catch (ValidationException e) {
             System.out.println("Validation Error: " + e.getMessage());
@@ -251,7 +251,7 @@ public class DonateMain {
             System.out.print("Enter Payment Amount: ");
             BigDecimal amount = new BigDecimal(sc.nextLine());
             boolean ok = donateService.recordPayment(pledgeID, amount);
-            System.out.println(ok ? "PAYMENT RECORDED SUCCESSFULLY!" 
+            System.out.println(ok ? "PAYMENT RECORDED SUCCESSFULLY!"
                                   : "PAYMENT FAILED!");
         } catch (ValidationException e) {
             System.out.println("Validation Error: " + e.getMessage());

@@ -1,5 +1,7 @@
 package com.donate.bean;
 
+import java.sql.Date;
+
 public class Donor {
 	private String donorId;
 	private String fullName;

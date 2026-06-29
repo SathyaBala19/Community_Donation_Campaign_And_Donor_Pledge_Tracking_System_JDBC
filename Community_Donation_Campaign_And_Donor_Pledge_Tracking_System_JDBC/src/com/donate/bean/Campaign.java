@@ -1,7 +1,7 @@
 package com.donate.bean;
 
+import java.sql.Date;
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class Campaign {
 	private String campaignId;
